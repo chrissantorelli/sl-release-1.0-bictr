@@ -1,0 +1,110 @@
+================================================================================
+BICTR Channel Model - Build and Run Instructions
+================================================================================
+
+BUILD INSTRUCTIONS
+================================================================================
+
+1. Navigate to build directory:
+   cd /home/chris/Desktop/openairinterface5g-sl-release-1.0/cmake_targets
+
+2. Clean previous build (optional):
+   rm -rf ran_build/build/*
+
+3. Build the project (for rfsimulator, no hardware needed):
+   ./build_oai -C --gNB --nrUE -x
+
+   OR build with rfsimulator explicitly:
+   ./build_oai -C -w SIMU --gNB --nrUE -x
+
+   OR if using make directly:
+   cd ran_build/build
+   make -j$(nproc)
+
+
+RUN COMMANDS
+================================================================================
+
+IMPORTANT: Run these commands from the project ROOT directory:
+  cd /home/chris/Desktop/openairinterface5g-sl-release-1.0
+
+Method 1: Using BICTR Configuration File (Recommended)
+-------------------------------------------------------
+cd /home/chris/Desktop/openairinterface5g-sl-release-1.0
+sudo ./cmake_targets/ran_build/build/nr-softmodem \
+  -O ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.bictr.conf \
+  --rfsim \
+  --rfsimulator.options chanmod \
+  --rfsimulator.serveraddr server
+
+
+Method 2: Using Base Config with Command-Line Overrides
+---------------------------------------------------------
+cd /home/chris/Desktop/openairinterface5g-sl-release-1.0
+sudo ./cmake_targets/ran_build/build/nr-softmodem \
+  -O ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.conf \
+  --rfsim \
+  --rfsimulator.options chanmod \
+  --channelmod.modellist modellist_bictr \
+  --channelmod.modellist_bictr.[0].type BICTR
+
+
+Method 3: Using Aggressive Search Mode
+---------------------------------------
+cd /home/chris/Desktop/openairinterface5g-sl-release-1.0
+sudo ./cmake_targets/ran_build/build/nr-softmodem \
+  -O ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.bictr.conf \
+  --rfsim \
+  --rfsimulator.options chanmod \
+  --channelmod.modellist modellist_bictr_aggressive
+
+
+QUICK START (Copy and Paste)
+================================================================================
+
+# Build:
+cd /home/chris/Desktop/openairinterface5g-sl-release-1.0/cmake_targets
+./build_oai -C --gNB --nrUE -x
+
+# Run (from project root):
+cd /home/chris/Desktop/openairinterface5g-sl-release-1.0
+sudo ./cmake_targets/ran_build/build/nr-softmodem \
+  -O ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.bictr.conf \
+  --rfsim \
+  --rfsimulator.options chanmod \
+  --rfsimulator.serveraddr server
+
+# OR if you're already in cmake_targets directory:
+cd /home/chris/Desktop/openairinterface5g-sl-release-1.0/cmake_targets
+sudo ./ran_build/build/nr-softmodem \
+  -O ../ci-scripts/conf_files/gnb.sa.band78.106prb.rfsim.bictr.conf \
+  --rfsim \
+  --rfsimulator.options chanmod \
+  --rfsimulator.serveraddr server
+
+
+VERIFICATION
+================================================================================
+
+Check logs for:
+- "BICTR config stored for model rfsimu_channel_enB0"
+- "Model rfsimu_channel_enB0 type BICTR allocated from config file"
+
+If telnet server is enabled:
+  telnet 127.0.0.1 9090
+  > channelmod show current
+
+
+TROUBLESHOOTING
+================================================================================
+
+Build Issues:
+- If you see UHD/USRP errors: Remove -w USRP flag (not needed for rfsimulator)
+- If you see cblas errors: Install with: sudo apt-get install libatlas-base-dev
+- For rfsimulator builds, use: ./build_oai -C --gNB --nrUE -x (no -w USRP)
+
+Runtime Issues:
+- Ensure --rfsimulator.options chanmod is included
+- Verify config file path is correct
+- Check that channelmod_bictr.conf is included in main config
+- Ensure type = "BICTR" in channelmod configuration

@@ -71,7 +71,7 @@ INFO: Fine, parser rejected the command AT+COPS=2asd3,33ads1
 INFO: Fine, parser rejected the command AT+COPS.=5
 INFO: Fine, parser rejected the command AT+COPS?/r\r
 INFO: Fine, parser rejected the command AT+COPS=?
-
+
 INFO: Fine, parser rejected the command AT+CGREG=da1243"r
 INFO: Fine, parser rejected the command AT+CGREG.?
 INFO: Fine, parser rejected the command AT+CGREG1=?
@@ -81,7 +81,7 @@ INFO: Fine, parser rejected the command AT+CGDCONcTc=c?
 INFO: Fine, parser rejected the command AT+CGA12C3T=11Sr
 INFO: Fine, parser rejected the command AT+CGACT';;.,?
 INFO: Fine, parser rejected the command AT+CGACT=?]\;e23
-INFO: Fine, parser rejected the command 
+INFO: Fine, parser rejected the command 
 INFO: Fine, parser rejected the command AT+COP
 Note 1: Carriage return will be appended to every command by default
 Note 2: Enter 'quit' to exit
